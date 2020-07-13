@@ -17,6 +17,9 @@ foreach($json2 AS $line) {
     if(isset($result[$line->group])) {
         $result[$line->group]['expenditures'] += $line->expenditures;
         $result[$line->group]['incomes'] += $line->incomes;
+    } else {
+        print_r($line);
+        exit();
     }
 }
 

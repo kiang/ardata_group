@@ -2,26 +2,32 @@
 $openGroups = array();
 $groupFh = array();
 foreach(glob(dirname(__DIR__) . '/openGroups/*.csv') AS $csvFile) {
+    $p = pathinfo($csvFile);
+    $parts = explode('_', $p['basename']);
     $fh = fopen($csvFile, 'r');
     fgetcsv($fh, 2048);
     $fhCreated = false;
     while($line = fgetcsv($fh, 2048)) {
+        $line[12] = $parts[0];
         if(false === $fhCreated) {
             $fhCreated = true;
             $rawPath = dirname(__DIR__) . '/raw/' . $line[12];
+            if(!file_exists($rawPath)) {
+                mkdir($rawPath, 0777, true);
+            }
             $groupFh[$line[12]] = array(
                 'expenditures' => $rawPath . '/expenditures.csv',
                 'incomes' => $rawPath . '/incomes.csv',
             );
         }
-        if(!isset($openGroups[$line[13]])) {
+        if(!isset($openGroups[$line[13]]) && strlen($line[13]) === 8) {
             $openGroups[$line[13]] = array(
                 'group' => $line[12],
                 'expenditures' => 0,
                 'incomes' => 0,
             );
         }
-        if(!isset($openGroups[$line[14]])) {
+        if(!isset($openGroups[$line[14]]) && strlen($line[14]) === 8) {
             $openGroups[$line[14]] = array(
                 'group' => $line[12],
                 'expenditures' => 0,
