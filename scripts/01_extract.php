@@ -20,6 +20,9 @@ foreach(glob(dirname(__DIR__) . '/openGroups/*.csv') AS $csvFile) {
                 'incomes' => $rawPath . '/incomes.csv',
             );
         }
+        if($line[18] == '1') {
+            continue;
+        }
         if(!isset($openGroups[$line[13]]) && strlen($line[13]) === 8) {
             $openGroups[$line[13]] = array(
                 'group' => $line[12],
