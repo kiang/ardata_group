@@ -14,7 +14,7 @@ foreach(glob(dirname(__DIR__) . '/openGroups/*.csv') AS $csvFile) {
         $line[12] = $parts[0];
         if(false === $fhCreated) {
             $fhCreated = true;
-            $rawPath = dirname(__DIR__) . '/raw/' . $line[12];
+            $rawPath = dirname(__DIR__) . '/raw/2022/' . $line[12];
             if(!file_exists($rawPath)) {
                 mkdir($rawPath, 0777, true);
             }
