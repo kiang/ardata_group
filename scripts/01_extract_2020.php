@@ -11,7 +11,7 @@ foreach(glob(dirname(__DIR__) . '/openGroups/*.csv') AS $csvFile) {
         $line[12] = $parts[0];
         if(false === $fhCreated) {
             $fhCreated = true;
-            $rawPath = dirname(__DIR__) . '/raw/' . $line[12];
+            $rawPath = dirname(__DIR__) . '/raw/2020/' . $line[12];
             if(!file_exists($rawPath)) {
                 mkdir($rawPath, 0777, true);
             }
@@ -42,7 +42,7 @@ foreach(glob(dirname(__DIR__) . '/openGroups/*.csv') AS $csvFile) {
 
 $zip = new ZipArchive;
 $expenditures = $incomes = array();
-foreach(glob('/home/kiang/public_html/ardata.cy.gov.tw/data/indifidual/account/109年立法委員選舉/*/*.zip') AS $zipFile) {
+foreach(glob('/home/kiang/public_html/ardata.cy.gov.tw/data/individual/account/109年*/*/*.zip') AS $zipFile) {
     $fh = fopen("zip://{$zipFile}#expenditures.csv", 'r');
     fgetcsv($fh, 2048);
     while($line = fgetcsv($fh, 2048)) {
@@ -73,35 +73,4 @@ foreach(glob('/home/kiang/public_html/ardata.cy.gov.tw/data/indifidual/account/1
         }
     }
 }
-foreach(glob('/home/kiang/public_html/ardata.cy.gov.tw/data/indifidual/account/109年總統、副總統選舉/*.zip') AS $zipFile) {
-    $fh = fopen("zip://{$zipFile}#expenditures.csv", 'r');
-    fgetcsv($fh, 2048);
-    while($line = fgetcsv($fh, 2048)) {
-        if(!isset($line[7])) {
-            continue;
-        }
-        $line[7] = trim($line[7]);
-        if(!empty($line[7]) && false === strpos($line[7], '*') && isset($openGroups[$line[7]])) {
-            $oFh = fopen($groupFh[$openGroups[$line[7]]['group']]['expenditures'], 'a+');
-            fputcsv($oFh, $line);
-            fclose($oFh);
-            $openGroups[$line[7]]['expenditures'] += intval($line[9]);
-        }
-    }
-
-    $fh = fopen("zip://{$zipFile}#incomes.csv", 'r');
-    fgetcsv($fh, 2048);
-    while($line = fgetcsv($fh, 2048)) {
-        if(!isset($line[7])) {
-            continue;
-        }
-        $line[7] = trim($line[7]);
-        if(!empty($line[7]) && false === strpos($line[7], '*') && isset($openGroups[$line[7]])) {
-            $oFh = fopen($groupFh[$openGroups[$line[7]]['group']]['incomes'], 'a+');
-            fputcsv($oFh, $line);
-            fclose($oFh);
-            $openGroups[$line[7]]['incomes'] += intval($line[8]);
-        }
-    }
-}
-file_put_contents(dirname(__DIR__) . '/report/01_extract.json', json_encode($openGroups));
+file_put_contents(dirname(__DIR__) . '/report/01_extract_2020.json', json_encode($openGroups));

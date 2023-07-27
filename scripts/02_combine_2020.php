@@ -1,7 +1,7 @@
 <?php
 $result = array();
 $json1 = json_decode(file_get_contents(dirname(__DIR__) . '/openGroups/groupName_2016.json'));
-$json2 = json_decode(file_get_contents(dirname(__DIR__) . '/report/01_extract.json'));
+$json2 = json_decode(file_get_contents(dirname(__DIR__) . '/report/01_extract_2020.json'));
 
 foreach($json1 AS $group) {
     $result[$group->group_no] = array(
@@ -32,7 +32,7 @@ function cmp($a, $b)
 }
 usort($result, "cmp");
 
-$fh = fopen(dirname(__DIR__) . '/report/02_combine.csv', 'w');
+$fh = fopen(dirname(__DIR__) . '/report/02_combine_2020.csv', 'w');
 fputcsv($fh, array('集團', '捐款', '花費', '集團代碼', '相關公司'));
 foreach($result AS $line) {
     if($line['incomes'] > 0 || $line['expenditures'] > 0) {
